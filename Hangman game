@@ -1,0 +1,79 @@
+# hangman game
+import random
+words = ["apple", "banana", "orange", "coconut", "pineapple", "zenia", "pepsi", "milky", "science", "hangman", "fruit", "zoey", "potato", "ringo", "mango", "cat", "manu", "tail", "queen", "slay"]
+hangman_art = {0:("   ",
+                  "    ",
+                  "    "),
+               1:(" o ",
+                  "  ",
+                  "  "),
+               2:(" o ",
+                  " | ",
+                  "  "),
+               3:(" o ",
+                  "/|",
+                  "  "),
+               4:(" o ",
+                  "/|\\",
+                  "  "),
+               5:(" o ",
+                  "/|\\",
+                  "/ "),
+               6:(" o ",
+                  "/|\\",
+                  "/ \\")}
+
+def show_hangman_art(wrong_guesses):
+    for line in hangman_art[wrong_guesses]:
+        print(line)
+
+def hangman_hint(hint):
+    print(" ".join(hint))
+def hangman_answer(answer):
+    print(" ".join(answer))
+def main():
+    answer = random.choice(words)
+    hint = ["_"] * len(answer)
+    wrong_guesses = 0
+    guessed_letters = set()
+    running = True
+    while running:
+        show_hangman_art(wrong_guesses)
+        hangman_hint(hint)
+        guess = input("Guess the word").lower()
+        if not len(guess) == 1 or not guess.isalpha():
+            print("Please enter a valid input")
+            continue
+
+        if guess in guessed_letters:
+            print(f"You already guessed {guess}")
+            continue
+        guessed_letters.add(guess)
+        if guess in answer:
+            for i in range(len(answer)):
+                if answer[i] == guess:
+                    hint[i] = guess
+        else:
+            wrong_guesses += 1
+
+        if "_" not in hint:
+            show_hangman_art(wrong_guesses)
+            hangman_answer(answer)
+            print("Congratulations! you won the game!!")
+            running = False
+        elif wrong_guesses >= len(hangman_art) - 1:
+            show_hangman_art(wrong_guesses)
+            hangman_answer(answer)
+            print("YOU LOST HAHAAH ITS SUCH AN EASY GAME LOLLL")
+            running = False
+
+
+
+    play_again = input("Would you like to play again? y/n").lower()
+    if play_again == "y":
+        main()
+    else:
+        print("Thank you for playing and have a okay ish day")
+
+if __name__ == "__main__":
+    main()
